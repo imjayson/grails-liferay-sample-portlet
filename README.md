@@ -19,7 +19,6 @@
 
 * Copy war file from target directory to Liferay's deploy directory.
 
-#### And you're done!
 
-
+#### Article:
 How to create your own Grails portlet for Liferay: [here](http://sysgears.com/articles/how-create-your-own-grails-portlet-liferay/ "How to create your own Grails portlet for Liferay")
