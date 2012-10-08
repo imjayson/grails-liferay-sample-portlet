@@ -8,7 +8,9 @@
 #### Quick Start:
 * Clone the repo:
 
-    ```git clone https://github.com/Lizard5472/grails-cars-portlet-liferay.git```
+    ```
+    git clone https://github.com/Lizard5472/grails-cars-portlet-liferay.git
+    ```
 
 * Go to Project's root directory:
 
