@@ -17,16 +17,16 @@ class CarPortlet {
 This is my sample grails liferay portlet.
 '''
 	def displayName = 'Car Portlet'
-	def supports = ['text/html':['view', 'edit', 'help']]
+	def supports = ['text/html': ['view', 'edit', 'help']]
 	def liferay_display_category = "Cars"
 
 	def liferay_portlet_header_portlet_css = [
 			'/css/car.css'
 	]
-	
+
 	//uncomment to declare events support
 	//def events = [publish: ["event-1"], process: ["event-2"]]
-	
+
 	//uncomment to declare public render parameter support
 	//def public_render_params = ["prp-1","prp-2"]
 
@@ -75,7 +75,7 @@ This is my sample grails liferay portlet.
 	def actionEdit = {
 		//TODO Define action phase for 'edit' portlets mode
 
-		portletResponse.setEvent("event-1","event-1")
+		portletResponse.setEvent("event-1", "event-1")
 		portletResponse.setPortletMode(PortletMode.VIEW)
 	}
 
@@ -96,27 +96,27 @@ This is my sample grails liferay portlet.
 		//TODO Define render phase for 'help' portlets mode
 		//Return the map of the variables bound to the view,
 		//in this case help.gsp if it exists or render.gsp if not
-		['mykey':'myvalue']
+		['mykey': 'myvalue']
 	}
 
 	def doResource = {
 		//TODO Define handling for default resource URL handling method, independent of porlet mode
 		//Return the map of the variables bound to the view,
 		//in this case resource.gsp
-		['mykey':'myvalue']
+		['mykey': 'myvalue']
 	}
 
 	//invoked by setting 'action' param in resourceURL (as an example) to 'doSomethingAjaxy'
-	def doSomethingAjaxy =  {
+	def doSomethingAjaxy = {
 		//render JSON
-		render(contentType:"text/json") {
-			example(mykey:"myvalue")
+		render(contentType: "text/json") {
+			example(mykey: "myvalue")
 		}
 	}
 
 	//invoked by setting 'action' param in eventURL (as an example) to 'handleThisEvent'
-	def handleThisEvent =  {
+	def handleThisEvent = {
 		//render thisEvent.gsp
-		render(view:"thisEvent")
+		render(view: "thisEvent")
 	}
 }
