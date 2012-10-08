@@ -12,8 +12,10 @@
 
 2. Go to Project's root directory:
     
-```cd /path/to/project/root/dir```
-```grails war```
+```
+cd /path/to/project/root/dir
+grails war
+```
 
 3. Copy war file from target directory to Liferay's deploy directory.
 
