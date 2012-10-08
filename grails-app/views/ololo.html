@@ -1,0 +1,248 @@
+<p><b id="internal-source-marker_0.6417562616989017"
+      style="font-family: 'Times New Roman'; line-height: normal; font-size: medium; "><span
+        style="font-size: 15px; font-family: Arial; background-color: transparent; font-weight: normal; white-space: pre-wrap; ">Portlets are pluggable user interface software components that are managed and displayed in a web portal. Portlets produce fragments of markup code that are aggregated into a portal. </span><br><span
+        style="font-size: 15px; font-family: Arial; background-color: transparent; font-weight: normal; white-space: pre-wrap; ">There are two specifications of portlets exist nowadays, they are JSR-168 (Java Portlet Api) and JSR-286 (Java Portlet Api 2.0). </span><br><br><span
+        style="font-size: 15px; font-family: Arial; background-color: transparent; font-weight: normal; white-space: pre-wrap; ">Let's create our own portlet for Liferay portal. Liferay is an opensource portal bundled with different servlet containers, such as Tomcat, Jetty, Geronimo, JBoss, etc. As it is opensource it has a reach variaty of opensource portlets for every life situation. However documentation for Liferay is not that good in my opinion. To deploy your portlet you need Liferay portal to be installed on you machine. I used Liferay bundled with Tomcat of version 6.0.6 and Grails 2.0.4.</span><br><br><span
+        style="font-size: 15px; font-family: Arial; background-color: transparent; font-weight: normal; white-space: pre-wrap; ">You can create more than one portlet within your Grails application, and it’s very easy to implement portlets in Groovy way.</span><br><br><span
+        style="font-size: 15px; font-family: Arial; background-color: transparent; font-weight: normal; white-space: pre-wrap; ">To create our own Liferay portlet using Grails we need two plugins.</span></b><br>&nbsp;
+</p>
+<pre class="prettyprint" linenumbers="off" type="groovy"><b id="internal-source-marker_0.6417562616989017"
+                                                            style="font-family: 'Times New Roman'; line-height: normal; font-size: medium; "><span
+        style="font-size: 15px; font-family: 'Courier New'; background-color: transparent; font-weight: normal; white-space: pre-wrap; ">grails install-plugin portlets</span></b>
+<b id="internal-source-marker_0.6417562616989017"
+   style="font-family: 'Times New Roman'; line-height: normal; font-size: medium; "><span
+        style="font-size: 15px; font-family: 'Courier New'; background-color: transparent; font-weight: normal; white-space: pre-wrap; ">grails install-plugin portlets-liferay</span></b></pre>
+<br><br><p><b id="internal-source-marker_0.6417562616989017"
+              style="font-family: 'Times New Roman'; line-height: normal; font-size: medium; "><span
+        style="font-size: 15px; font-family: Arial; background-color: transparent; font-weight: normal; white-space: pre-wrap; ">To create portlet application we need to create portlet class which will contain specific liferay configurations and portlet actions.</span><br><span
+        style="font-size: 15px; font-family: Arial; background-color: transparent; font-weight: normal; white-space: pre-wrap; ">This can be done by executing command : </span></b><br>&nbsp;
+</p>
+<pre class="prettyprint" linenumbers="off" type="groovy"><b id="internal-source-marker_0.6417562616989017"
+                                                            style="font-family: 'Times New Roman'; line-height: normal; font-size: medium; "><span
+        style="font-size: 15px; font-family: 'Courier New'; background-color: transparent; font-weight: normal; white-space: pre-wrap; ">grails create-portlet &lt;package&gt;.&lt;portletName&gt;.</span></b></pre>
+<br><br><br><br><p><b id="internal-source-marker_0.6417562616989017"
+                      style="font-family: 'Times New Roman'; line-height: normal; font-size: medium; "><span
+        style="font-size: 15px; font-family: Arial; background-color: transparent; font-weight: normal; white-space: pre-wrap; ">* Note that command will automaticaly add «Portlet» keyword to the end of &lt;portletName&gt;.</span><br><br><span
+        style="font-size: 15px; font-family: Arial; background-color: transparent; font-weight: normal; white-space: pre-wrap; ">Portlet groovy file will be generated under /grails-app/portlets directory</span><br><span
+        style="font-size: 15px; font-family: Arial; background-color: transparent; font-weight: normal; white-space: pre-wrap; ">Here what it looks like:</span></b>
+</p>
+<pre class="prettyprint" linenumbers="off" type="groovy"><b id="internal-source-marker_0.6417562616989017"
+                                                            style="font-family: 'Times New Roman'; line-height: normal; font-size: medium; "><span
+        style="font-size: 15px; font-family: 'Courier New'; background-color: transparent; font-weight: normal; white-space: pre-wrap; ">import javax.portlet.*</span>
+    <span style="font-size: 15px; font-family: 'Courier New'; background-color: transparent; font-weight: normal; white-space: pre-wrap; ">class &lt;PortletName&gt;Portlet {</span>
+
+    <span style="font-size: 15px; font-family: 'Courier New'; background-color: transparent; font-weight: normal; white-space: pre-wrap; ">&nbsp;def title = 'Portlet Title'</span>
+    <span style="font-size: 15px; font-family: 'Courier New'; background-color: transparent; font-weight: normal; white-space: pre-wrap; ">&nbsp;def description = '''</span>
+    <span style="font-size: 15px; font-family: 'Courier New'; background-color: transparent; font-weight: normal; white-space: pre-wrap; ">Description about the portlet goes here.</span>
+    <span style="font-size: 15px; font-family: 'Courier New'; background-color: transparent; font-weight: normal; white-space: pre-wrap; ">'''</span>
+    <span style="font-size: 15px; font-family: 'Courier New'; background-color: transparent; font-weight: normal; white-space: pre-wrap; ">&nbsp;def displayName = 'Display Name'</span>
+    <span style="font-size: 15px; font-family: 'Courier New'; background-color: transparent; font-weight: normal; white-space: pre-wrap; ">&nbsp;def supports = ['text/html':['view', 'edit', 'help']]</span>
+
+    <span style="font-size: 15px; font-family: 'Courier New'; background-color: transparent; font-weight: normal; white-space: pre-wrap; ">&nbsp;// DEFINITIONS FOR liferay-display.xml</span>
+    <span style="font-size: 15px; font-family: 'Courier New'; background-color: transparent; font-weight: normal; white-space: pre-wrap; ">&nbsp;def liferay_display_category = 'MyCategory'</span>
+
+    <span style="font-size: 15px; font-family: 'Courier New'; background-color: transparent; font-weight: normal; white-space: pre-wrap; ">&nbsp;// DEFINITIONS FOR liferay-portlets.xml</span>
+    <span style="font-size: 15px; font-family: 'Courier New'; background-color: transparent; font-weight: normal; white-space: pre-wrap; ">&nbsp;def liferay_portlet_ajaxable = 'true'</span>
+    <span style="font-size: 15px; font-family: 'Courier New'; background-color: transparent; font-weight: normal; white-space: pre-wrap; ">&nbsp;def liferay_portlet_header_portlet_css = [</span>
+    <span style="font-size: 15px; font-family: 'Courier New'; background-color: transparent; font-weight: normal; white-space: pre-wrap; ">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'/css/protoFlow.css'</span>
+    <span style="font-size: 15px; font-family: 'Courier New'; background-color: transparent; font-weight: normal; white-space: pre-wrap; ">&nbsp;]</span>
+    <span style="font-size: 15px; font-family: 'Courier New'; background-color: transparent; font-weight: normal; white-space: pre-wrap; ">&nbsp;def liferay_portlet_header_portlet_javascript = [</span>
+    <span style="font-size: 15px; font-family: 'Courier New'; background-color: transparent; font-weight: normal; white-space: pre-wrap; ">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'/plugins/richui-0.5/js/flow/lib/prototype.js',</span>
+    <span style="font-size: 15px; font-family: 'Courier New'; background-color: transparent; font-weight: normal; white-space: pre-wrap; ">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'/plugins/richui-0.5/js/flow/lib/scriptaculous.js',</span>
+    <span style="font-size: 15px; font-family: 'Courier New'; background-color: transparent; font-weight: normal; white-space: pre-wrap; ">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'/plugins/richui-0.5/js/reflection/reflection.js',</span>
+    <span style="font-size: 15px; font-family: 'Courier New'; background-color: transparent; font-weight: normal; white-space: pre-wrap; ">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'/plugins/richui-0.5/js/flow/protoFlow.js'</span>
+    <span style="font-size: 15px; font-family: 'Courier New'; background-color: transparent; font-weight: normal; white-space: pre-wrap; ">&nbsp;]</span>
+
+    <span style="font-size: 15px; font-family: 'Courier New'; background-color: transparent; font-weight: normal; white-space: pre-wrap; ">...</span></b></pre>
+<br><br><br><p><b id="internal-source-marker_0.6417562616989017"
+                  style="font-family: 'Times New Roman'; line-height: normal; font-size: medium; "><span
+        style="font-size: 15px; font-family: Arial; background-color: transparent; font-weight: normal; white-space: pre-wrap; ">Portlets-liferay plugin for Grails reads configuration from Config.groovy and Portlet groovy class and generates all needed Liferay xmls and property files under WEB-INF directory.</span><br><span
+        style="font-size: 15px; font-family: Arial; background-color: transparent; font-weight: normal; white-space: pre-wrap; ">In your portlet class you can define title of portlet, display name, description for which purpose this portlet can be used, header JavaScript and CSS files, etc.</span><br><br><span
+        style="font-size: 15px; font-family: Arial; background-color: transparent; font-weight: normal; white-space: pre-wrap; ">In Config.groovy file you can specify role-mapper and custom user attributes, like this:</span></b><br>&nbsp;
+</p>
+<pre class="prettyprint" linenumbers="off" type="groovy"><b id="internal-source-marker_0.6417562616989017"
+                                                            style="font-family: 'Times New Roman'; line-height: normal; font-size: medium; "><span
+        style="font-size: 15px; font-family: 'Courier New'; background-color: transparent; font-weight: normal; white-space: pre-wrap; ">liferay {</span>
+    <span style="font-size: 15px; font-family: 'Courier New'; background-color: transparent; font-weight: normal; white-space: pre-wrap; ">&nbsp;&nbsp;&nbsp;portlet_role_mappers = ['administrator':'Administrator', 'guest':'Guest']</span>
+    <span style="font-size: 15px; font-family: 'Courier New'; background-color: transparent; font-weight: normal; white-space: pre-wrap; ">&nbsp;&nbsp;&nbsp;//portlet_custom_user_attributes = ['foo':'com.example.bar.Baz']</span>
+    <span style="font-size: 15px; font-family: 'Courier New'; background-color: transparent; font-weight: normal; white-space: pre-wrap; ">&nbsp;&nbsp;&nbsp;plugin_package {</span>
+    <span style="font-size: 15px; font-family: 'Courier New'; background-color: transparent; font-weight: normal; white-space: pre-wrap; ">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;name = "${appName}"</span>
+    <span style="font-size: 15px; font-family: 'Courier New'; background-color: transparent; font-weight: normal; white-space: pre-wrap; ">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;module_group_id = 'MyModule'</span>
+    <span style="font-size: 15px; font-family: 'Courier New'; background-color: transparent; font-weight: normal; white-space: pre-wrap; ">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;module_incremental_version = '1'</span>
+    <span style="font-size: 15px; font-family: 'Courier New'; background-color: transparent; font-weight: normal; white-space: pre-wrap; ">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;tags='sample'</span>
+    <span style="font-size: 15px; font-family: 'Courier New'; background-color: transparent; font-weight: normal; white-space: pre-wrap; ">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;short_description='a short description'</span>
+    <span style="font-size: 15px; font-family: 'Courier New'; background-color: transparent; font-weight: normal; white-space: pre-wrap; ">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;change_log=''</span>
+    <span style="font-size: 15px; font-family: 'Courier New'; background-color: transparent; font-weight: normal; white-space: pre-wrap; ">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;page_uri=''</span>
+    <span style="font-size: 15px; font-family: 'Courier New'; background-color: transparent; font-weight: normal; white-space: pre-wrap; ">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;author='Kenji Nakamura'</span>
+    <span style="font-size: 15px; font-family: 'Courier New'; background-color: transparent; font-weight: normal; white-space: pre-wrap; ">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;license='Proprietary'</span>
+    <span style="font-size: 15px; font-family: 'Courier New'; background-color: transparent; font-weight: normal; white-space: pre-wrap; ">&nbsp;&nbsp;&nbsp;}</span>
+    <span style="font-size: 15px; font-family: 'Courier New'; background-color: transparent; font-weight: normal; white-space: pre-wrap; ">}</span></b></pre>
+<br><br><p><b id="internal-source-marker_0.6417562616989017"
+              style="font-family: 'Times New Roman'; line-height: normal; font-size: medium; "><span
+        style="font-size: 15px; font-family: Arial; background-color: transparent; font-weight: normal; white-space: pre-wrap; ">You can check which roles you can grant access to the portlet in Control panel -&gt; Roles.</span><br><br><span
+        style="font-size: 15px; font-family: Arial; background-color: transparent; font-weight: normal; white-space: pre-wrap; ">To generate views use command : </span></b><br>&nbsp;
+</p>
+<pre class="prettyprint" linenumbers="off" type="groovy"><b id="internal-source-marker_0.6417562616989017"
+                                                            style="font-family: 'Times New Roman'; line-height: normal; font-size: medium; "><span
+        style="font-size: 15px; font-family: 'Courier New'; background-color: transparent; font-weight: normal; white-space: pre-wrap; ">grails generate-portlet-views &lt;package&gt;.&lt;PortletName&gt;</span></b></pre>
+<br><br><br><br><p><b id="internal-source-marker_0.6417562616989017"
+                      style="font-family: 'Times New Roman'; line-height: normal; font-size: medium; "><span
+        style="font-size: 15px; font-family: Arial; background-color: transparent; font-weight: normal; white-space: pre-wrap; ">This will create views under directory /grails-app/views/&lt;PortletName&gt;.</span><br><span
+        style="font-size: 15px; font-family: Arial; background-color: transparent; font-weight: normal; white-space: pre-wrap; ">From this point you can try to deploy your portlet to portal. Now let's add some stuff to our portlet logic. Create a domain Car class:</span></b>
+</p>
+<pre class="prettyprint" linenumbers="off" type="groovy"><b id="internal-source-marker_0.6417562616989017"
+                                                            style="font-family: 'Times New Roman'; line-height: normal; font-size: medium; "><span
+        style="font-size: 15px; font-family: 'Courier New'; background-color: transparent; font-weight: normal; white-space: pre-wrap; ">grails create-domain com.sysgears.Car</span></b></pre>
+<br><br><p><b id="internal-source-marker_0.6417562616989017"
+              style="font-family: 'Times New Roman'; line-height: normal; font-size: medium; "><span
+        style="font-size: 15px; font-family: Arial; background-color: transparent; font-weight: normal; white-space: pre-wrap; ">Now add two string fields to this class : 'name' and 'color'</span><br><span
+        style="font-size: 15px; font-family: Arial; background-color: transparent; font-weight: normal; white-space: pre-wrap; ">Let's create some cars:</span></b><br>&nbsp;
+</p>
+<pre class="prettyprint" linenumbers="off" type="groovy"><b id="internal-source-marker_0.6417562616989017"
+                                                            style="font-family: 'Times New Roman'; line-height: normal; font-size: medium; "><span
+        style="font-size: 15px; font-family: 'Courier New'; background-color: transparent; font-weight: normal; white-space: pre-wrap; ">class BootStrap {</span>
+
+    <span style="font-size: 15px; font-family: 'Courier New'; background-color: transparent; font-weight: normal; white-space: pre-wrap; ">&nbsp;&nbsp;&nbsp;def init = { servletContext -&gt;</span>
+    <span style="font-size: 15px; font-family: 'Courier New'; background-color: transparent; font-weight: normal; white-space: pre-wrap; ">&nbsp;&nbsp;&nbsp;<span
+            class="Apple-tab-span" style="white-space: pre; "> </span><span class="Apple-tab-span"
+                                                                            style="white-space: pre; "> </span><span
+            class="Apple-tab-span" style="white-space: pre; "> </span>if (!Car.count) {</span>
+    <span style="font-size: 15px; font-family: 'Courier New'; background-color: transparent; font-weight: normal; white-space: pre-wrap; ">def cars = [['BMW', 'Black'], ['Mersedes', 'White'], ['Porshe', 'Yellow'], ['Aston Martin', 'White'],</span>
+    <span style="font-size: 15px; font-family: 'Courier New'; background-color: transparent; font-weight: normal; white-space: pre-wrap; ">['Daewoo', 'Gray']]</span>
+    <span style="font-size: 15px; font-family: 'Courier New'; background-color: transparent; font-weight: normal; white-space: pre-wrap; ">cars.each { car -&gt;</span>
+    <span style="font-size: 15px; font-family: 'Courier New'; background-color: transparent; font-weight: normal; white-space: pre-wrap; ">new Car(name: car[0], color: car[1]).save(flush:true)</span>
+    <span style="font-size: 15px; font-family: 'Courier New'; background-color: transparent; font-weight: normal; white-space: pre-wrap; ">}</span>
+    <span style="font-size: 15px; font-family: 'Courier New'; background-color: transparent; font-weight: normal; white-space: pre-wrap; ">}</span>
+    <span style="font-size: 15px; font-family: 'Courier New'; background-color: transparent; font-weight: normal; white-space: pre-wrap; ">&nbsp;&nbsp;&nbsp;}</span>
+    <span style="font-size: 15px; font-family: 'Courier New'; background-color: transparent; font-weight: normal; white-space: pre-wrap; ">&nbsp;&nbsp;&nbsp;</span></b>
+
+<p>&nbsp;</p><p><b style="font-family: 'Times New Roman'; line-height: normal; font-size: medium; "><span
+        style="font-size: 15px; font-family: 'Courier New'; background-color: transparent; font-weight: normal; white-space: pre-wrap; ">def destroy = {</span><br><span
+        style="font-size: 15px; font-family: 'Courier New'; background-color: transparent; font-weight: normal; white-space: pre-wrap; ">&nbsp;&nbsp;&nbsp;}</span><br><span
+        style="font-size: 15px; font-family: 'Courier New'; background-color: transparent; font-weight: normal; white-space: pre-wrap; ">}</span></b></pre>
+</p><p>&nbsp;</p><p>&nbsp;</p><br><br><p><b
+        style="font-family: 'Times New Roman'; line-height: normal; font-size: medium; "><span
+        style="font-size: 15px; font-family: Arial; background-color: transparent; font-weight: normal; white-space: pre-wrap; ">Now we need to modify renderView and renderAction closures in our Portlet class.</span><br><br>
+    <pre class="prettyprint" linenumbers="off" type="groovy"><span
+        style="font-size: 15px; font-family: 'Courier New'; background-color: transparent; font-weight: normal; white-space: pre-wrap; ">class CarPortlet {</span><br><br><span
+        style="font-size: 15px; font-family: 'Courier New'; background-color: transparent; font-weight: normal; white-space: pre-wrap; ">def title = 'Car Portlet'</span><br><span
+        style="font-size: 15px; font-family: 'Courier New'; background-color: transparent; font-weight: normal; white-space: pre-wrap; ">def description = '''</span><br><span
+        style="font-size: 15px; font-family: 'Courier New'; background-color: transparent; font-weight: normal; white-space: pre-wrap; ">This is my sample grails liferay portlet.</span><br><span
+        style="font-size: 15px; font-family: 'Courier New'; background-color: transparent; font-weight: normal; white-space: pre-wrap; ">'''</span><br><span
+        style="font-size: 15px; font-family: 'Courier New'; background-color: transparent; font-weight: normal; white-space: pre-wrap; ">def displayName = 'Car Portlet'</span><br><span
+        style="font-size: 15px; font-family: 'Courier New'; background-color: transparent; font-weight: normal; white-space: pre-wrap; ">def supports = ['text/html':['view', 'edit', 'help']]</span><br><span
+        style="font-size: 15px; font-family: 'Courier New'; background-color: transparent; font-weight: normal; white-space: pre-wrap; ">def liferay_display_category = "Cars"</span><br><span
+        style="font-size: 15px; font-family: 'Courier New'; background-color: transparent; font-weight: normal; white-space: pre-wrap; ">&nbsp;def liferay_portlet_header_portlet_css = [</span><br><span
+        style="font-size: 15px; font-family: 'Courier New'; background-color: transparent; font-weight: normal; white-space: pre-wrap; ">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'/css/car.css'</span><br><span
+        style="font-size: 15px; font-family: 'Courier New'; background-color: transparent; font-weight: normal; white-space: pre-wrap; ">&nbsp;]</span><br><span
+        style="font-size: 15px; font-family: 'Courier New'; background-color: transparent; font-weight: normal; white-space: pre-wrap; ">...</span><br><br><span
+        style="font-size: 15px; font-family: 'Courier New'; background-color: transparent; font-weight: normal; white-space: pre-wrap; ">def actionView = {</span><br><span
+        style="font-size: 15px; font-family: 'Courier New'; background-color: transparent; font-weight: normal; white-space: pre-wrap; ">//TODO Define action phase for 'view' portlets mode</span><br><span
+        style="font-size: 15px; font-family: 'Courier New'; background-color: transparent; font-weight: normal; white-space: pre-wrap; ">def car = Car.get(params.id)</span><br><span
+        style="font-size: 15px; font-family: 'Courier New'; background-color: transparent; font-weight: normal; white-space: pre-wrap; ">if (car) {</span><br><span
+        style="font-size: 15px; font-family: 'Courier New'; background-color: transparent; font-weight: normal; white-space: pre-wrap; ">car.delete()</span><br><span
+        style="font-size: 15px; font-family: 'Courier New'; background-color: transparent; font-weight: normal; white-space: pre-wrap; ">}</span><br><span
+        style="font-size: 15px; font-family: 'Courier New'; background-color: transparent; font-weight: normal; white-space: pre-wrap; ">}</span><br><br><span
+        style="font-size: 15px; font-family: 'Courier New'; background-color: transparent; font-weight: normal; white-space: pre-wrap; ">def renderView = {</span><br><span
+        style="font-size: 15px; font-family: 'Courier New'; background-color: transparent; font-weight: normal; white-space: pre-wrap; ">//Return the map of the variables bound to the view,</span><br><span
+        style="font-size: 15px; font-family: 'Courier New'; background-color: transparent; font-weight: normal; white-space: pre-wrap; ">//in this case view.gsp if it exists or render.gsp if not</span><br><span
+        style="font-size: 15px; font-family: 'Courier New'; background-color: transparent; font-weight: normal; white-space: pre-wrap; ">def cars = Car.list()</span><br><span
+        style="font-size: 15px; font-family: 'Courier New'; background-color: transparent; font-weight: normal; white-space: pre-wrap; ">[cars: cars]</span><br><span
+        style="font-size: 15px; font-family: 'Courier New'; background-color: transparent; font-weight: normal; white-space: pre-wrap; ">}</span><br><span
+        style="font-size: 15px; font-family: 'Courier New'; background-color: transparent; font-weight: normal; white-space: pre-wrap; ">...</span><br><span
+        style="font-size: 15px; font-family: 'Courier New'; background-color: transparent; font-weight: normal; white-space: pre-wrap; ">}</span></pre><br><br><span
+        style="font-size: 15px; font-family: Arial; background-color: transparent; font-weight: normal; white-space: pre-wrap; ">We also need to change view.gsp file.</span><br><br>
+    <pre class="prettyprint" linenumbers="off" type="html"><span
+        style="font-size: 15px; font-family: 'Courier New'; background-color: transparent; font-weight: normal; white-space: pre-wrap; ">&lt;%@ taglib uri="http://java.sun.com/portlet" prefix="portlet" %&gt;</span><br><br><span
+        style="font-size: 15px; font-family: 'Courier New'; background-color: transparent; font-weight: normal; white-space: pre-wrap; ">&lt;div&gt;</span><br><span
+        style="font-size: 15px; font-family: 'Courier New'; background-color: transparent; font-weight: normal; white-space: pre-wrap; ">&lt;h1 class="header"&gt;What cars do we have?&lt;/h1&gt;</span><br><span
+        style="font-size: 15px; font-family: 'Courier New'; background-color: transparent; font-weight: normal; white-space: pre-wrap; ">&lt;ul&gt;</span><br><span
+        style="font-size: 15px; font-family: 'Courier New'; background-color: transparent; font-weight: normal; white-space: pre-wrap; ">&lt;g:each in="${cars}" var="car"&gt;</span><br><span
+        style="font-size: 15px; font-family: 'Courier New'; background-color: transparent; font-weight: normal; white-space: pre-wrap; ">&lt;li&gt;${car.name} with ${car.color} color.&lt;/li&gt;</span><br><span
+        style="font-size: 15px; font-family: 'Courier New'; background-color: transparent; font-weight: normal; white-space: pre-wrap; ">&lt;/g:each&gt;</span><br><span
+        style="font-size: 15px; font-family: 'Courier New'; background-color: transparent; font-weight: normal; white-space: pre-wrap; ">&lt;/ul&gt;</span><br><span
+        style="font-size: 15px; font-family: 'Courier New'; background-color: transparent; font-weight: normal; white-space: pre-wrap; ">&lt;h1 class="header"&gt;Choose car to be removed!&lt;/h1&gt;</span><br><span
+        style="font-size: 15px; font-family: 'Courier New'; background-color: transparent; font-weight: normal; white-space: pre-wrap; ">&lt;form method="post" action="${portletResponse.createActionURL()}"&gt;</span><br><span
+        style="font-size: 15px; font-family: 'Courier New'; background-color: transparent; font-weight: normal; white-space: pre-wrap; ">&lt;g:select name="id" from="${cars}" optionKey="id" optionValue="name"/&gt;</span><br><span
+        style="font-size: 15px; font-family: 'Courier New'; background-color: transparent; font-weight: normal; white-space: pre-wrap; ">&lt;input type="submit" value="Submit"/&gt;</span><br><span
+        style="font-size: 15px; font-family: 'Courier New'; background-color: transparent; font-weight: normal; white-space: pre-wrap; ">&lt;/form&gt;</span><br><span
+        style="font-size: 15px; font-family: 'Courier New'; background-color: transparent; font-weight: normal; white-space: pre-wrap; ">&lt;/div&gt;</span>
+        </pre><br><br><span
+        style="font-size: 15px; font-family: Arial; background-color: transparent; font-weight: normal; white-space: pre-wrap; ">To deploy portlet to liferay portal you need to do the following:</span><br><span
+        style="font-size: 15px; font-family: Arial; background-color: transparent; font-weight: normal; white-space: pre-wrap; ">1. Create war file. You can do that with command:</span><br><br><span
+        style="font-size: 15px; font-family: 'Courier New'; background-color: transparent; font-weight: normal; white-space: pre-wrap; ">grails war</span><br><br><span
+        style="font-size: 15px; font-family: Arial; background-color: transparent; font-weight: normal; white-space: pre-wrap; ">2. Then just copy fresh created war file to %LIFERAY_HOME%/deploy directory</span><br><span
+        style="font-size: 15px; font-family: Arial; background-color: transparent; font-weight: normal; white-space: pre-wrap; ">Container will try to deploy your portlet, and if it's ok, it will be available for use.</span><br><br><span
+        style="font-size: 15px; font-family: Arial; background-color: transparent; font-weight: normal; white-space: pre-wrap; ">To add portlet to page login as Bruno admin, and in controll panel go to Add -&gt; More -&gt; &lt;CategoryYouSpecified&gt; (in our case it’s “Cars”) and simply drag &lt;DisplayNameYouSpecified&gt; (“Car Portlet”) to the page.</span><br><br><span
+        style="font-size: 15px; font-family: Arial; background-color: transparent; font-weight: normal; white-space: pre-wrap; ">But what should you do if you want to add your own action?</span><br><span
+        style="font-size: 15px; font-family: Arial; background-color: transparent; font-weight: normal; white-space: pre-wrap; ">Let's define action to create a car. In our portlet class it will look like :</span><br><br>
+    <pre class="prettyprint" linenumbers="off" type="groovy"><span
+        style="font-size: 15px; font-family: 'Courier New'; background-color: transparent; font-weight: normal; white-space: pre-wrap; ">...</span><br><br><span
+        style="font-size: 15px; font-family: 'Courier New'; background-color: transparent; font-weight: normal; white-space: pre-wrap; ">def addCar = {</span><br><span
+        style="font-size: 15px; font-family: 'Courier New'; background-color: transparent; font-weight: normal; white-space: pre-wrap; ">&nbsp;&nbsp;&nbsp;log.info('In add action. ' + params)</span><br><span
+        style="font-size: 15px; font-family: 'Courier New'; background-color: transparent; font-weight: normal; white-space: pre-wrap; ">&nbsp;&nbsp;&nbsp;if (params.name &amp;&amp; params.color) {</span><br><span
+        style="font-size: 15px; font-family: 'Courier New'; background-color: transparent; font-weight: normal; white-space: pre-wrap; ">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;carService.saveCar(params.name, params.color)</span><br><span
+        style="font-size: 15px; font-family: 'Courier New'; background-color: transparent; font-weight: normal; white-space: pre-wrap; ">&nbsp;&nbsp;&nbsp;}</span><br><span
+        style="font-size: 15px; font-family: 'Courier New'; background-color: transparent; font-weight: normal; white-space: pre-wrap; ">&nbsp;&nbsp;&nbsp;portletResponse.setPortletMode(PortletMode.VIEW)</span><br><span
+        style="font-size: 15px; font-family: 'Courier New'; background-color: transparent; font-weight: normal; white-space: pre-wrap; ">&nbsp;}</span><br><br><span
+        style="font-size: 15px; font-family: 'Courier New'; background-color: transparent; font-weight: normal; white-space: pre-wrap; ">...</span></pre><br><br><span
+        style="font-size: 15px; font-family: Arial; background-color: transparent; font-weight: normal; white-space: pre-wrap; ">One problem I had here is that GORM doesn't work in my actions, so I had to create a service which will create car instance. That is it looks like:</span><br><br>
+    <pre class="prettyprint" linenumbers="off" type="groovy"><span
+        style="font-size: 15px; font-family: 'Courier New'; background-color: transparent; font-weight: normal; white-space: pre-wrap; ">class CarService {</span><br><br><span
+        style="font-size: 15px; font-family: 'Courier New'; background-color: transparent; font-weight: normal; white-space: pre-wrap; ">&nbsp;def saveCar(String name, String color) {</span><br><span
+        style="font-size: 15px; font-family: 'Courier New'; background-color: transparent; font-weight: normal; white-space: pre-wrap; ">&nbsp;&nbsp;&nbsp;new Car(name: name, color: color).save(flush: true)</span><br><span
+        style="font-size: 15px; font-family: 'Courier New'; background-color: transparent; font-weight: normal; white-space: pre-wrap; ">&nbsp;}</span><br><span
+        style="font-size: 15px; font-family: 'Courier New'; background-color: transparent; font-weight: normal; white-space: pre-wrap; ">}</span></pre><br><br><span
+        style="font-size: 15px; font-family: Arial; background-color: transparent; font-weight: normal; white-space: pre-wrap; ">and now we need to map to our action from view.</span><br><span
+        style="font-size: 15px; font-family: Arial; background-color: transparent; font-weight: normal; white-space: pre-wrap; ">We can do that the following way by changing view.gsp:</span><br><br>
+    <pre class="prettyprint" linenumbers="off" type="groovy"><span
+        style="font-size: 15px; font-family: 'Courier New'; background-color: transparent; font-weight: normal; white-space: pre-wrap; ">&lt;portlet:actionURL var="addCarURL"&gt;</span><br><span
+        style="font-size: 15px; font-family: 'Courier New'; background-color: transparent; font-weight: normal; white-space: pre-wrap; ">&nbsp;&lt;portlet:param name="action" value="addCar" /&gt;</span><br><span
+        style="font-size: 15px; font-family: 'Courier New'; background-color: transparent; font-weight: normal; white-space: pre-wrap; ">&lt;/portlet:actionURL&gt;</span><br><br><span
+        style="font-size: 15px; font-family: 'Courier New'; background-color: transparent; font-weight: normal; white-space: pre-wrap; ">&lt;h1 class="header"&gt;Add a car&lt;/h1&gt;</span><br><span
+        style="font-size: 15px; font-family: 'Courier New'; background-color: transparent; font-weight: normal; white-space: pre-wrap; ">&lt;form method="post" action="&lt;%= addCarURL %&gt;"&gt;</span><br><span
+        style="font-size: 15px; font-family: 'Courier New'; background-color: transparent; font-weight: normal; white-space: pre-wrap; ">&nbsp;&nbsp;&nbsp;&lt;input placeholder="Enter car name..." name="name" /&gt;</span><br><span
+        style="font-size: 15px; font-family: 'Courier New'; background-color: transparent; font-weight: normal; white-space: pre-wrap; ">&nbsp;&nbsp;&nbsp;&lt;input placeholder="Enter car color..." name="color"&gt;</span><br><span
+        style="font-size: 15px; font-family: 'Courier New'; background-color: transparent; font-weight: normal; white-space: pre-wrap; ">&nbsp;&nbsp;&nbsp;&lt;input type="submit" value="Add" /&gt;</span><br><span
+        style="font-size: 15px; font-family: 'Courier New'; background-color: transparent; font-weight: normal; white-space: pre-wrap; ">&nbsp;&lt;/form&gt;</span></pre><br><br><span
+        style="font-size: 15px; font-family: Arial; background-color: transparent; font-weight: normal; white-space: pre-wrap; ">&lt;portlet:actionURL /&gt; tag creates actionURL to portlet, and we need to specify a parameter with the name of action to be invoked. So the name of the action is "addCar". Now we can add a car to cars list.</span><br><br><span
+        style="font-size: 15px; font-family: Arial; background-color: transparent; font-weight: normal; white-space: pre-wrap; ">We can invoke our newly created portlet action, but now another question is: 'How can we render our own views?' This can be done the following way, and it is not much different from mapping to portlet action: </span><br><span
+        style="font-size: 15px; font-family: Arial; background-color: transparent; font-weight: normal; white-space: pre-wrap; ">When car is added I want it to show a message that car was successfuly added.</span><br><span
+        style="font-size: 15px; font-family: Arial; background-color: transparent; font-weight: normal; white-space: pre-wrap; ">You have to create added.gsp in you /views/car/ directory, which would look like that:</span><br><br>
+    <pre class="prettyprint" linenumbers="off" type="groovy"><span
+        style="font-size: 15px; font-family: 'Courier New'; background-color: transparent; font-weight: normal; white-space: pre-wrap; ">%{--added.gsp--}%</span><br><span
+        style="font-size: 15px; font-family: 'Courier New'; background-color: transparent; font-weight: normal; white-space: pre-wrap; ">&lt;%@ taglib uri="http://java.sun.com/portlet" prefix="portlet" %&gt;</span><br><br><span
+        style="font-size: 15px; font-family: 'Courier New'; background-color: transparent; font-weight: normal; white-space: pre-wrap; ">Car was successfuly added!</span><br><br><span
+        style="font-size: 15px; font-family: 'Courier New'; background-color: transparent; font-weight: normal; white-space: pre-wrap; ">&lt;portlet:actionURL var="view" portletMode="view" /&gt;</span><br><br><span
+        style="font-size: 15px; font-family: 'Courier New'; background-color: transparent; font-weight: normal; white-space: pre-wrap; ">&lt;a href="&lt;%= view %&gt;"&gt;Back&lt;/a&gt;</span><br><br><span
+        style="font-size: 15px; font-family: Arial; background-color: transparent; font-weight: normal; white-space: pre-wrap; ">We wish this page to render after car was added, so we need to change our addCar closure a little:</span><br><br><span
+        style="font-size: 15px; font-family: 'Courier New'; background-color: transparent; font-weight: normal; white-space: pre-wrap; ">...</span><br><br><span
+        style="font-size: 15px; font-family: 'Courier New'; background-color: transparent; font-weight: normal; white-space: pre-wrap; ">def addCar = {</span><br><span
+        style="font-size: 15px; font-family: 'Courier New'; background-color: transparent; font-weight: normal; white-space: pre-wrap; ">&nbsp;&nbsp;&nbsp;log.info('In add action. ' + params)</span><br><span
+        style="font-size: 15px; font-family: 'Courier New'; background-color: transparent; font-weight: normal; white-space: pre-wrap; ">&nbsp;&nbsp;&nbsp;if (params.name &amp;&amp; params.color) {</span><br><span
+        style="font-size: 15px; font-family: 'Courier New'; background-color: transparent; font-weight: normal; white-space: pre-wrap; ">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;carService.saveCar(params.name, params.color)</span><br><span
+        style="font-size: 15px; font-family: 'Courier New'; background-color: transparent; font-weight: normal; white-space: pre-wrap; ">&nbsp;&nbsp;&nbsp;}</span><br><span
+        style="font-size: 15px; font-family: 'Courier New'; background-color: transparent; font-weight: normal; white-space: pre-wrap; ">&nbsp;&nbsp;&nbsp;portletResponse.setRenderParameter("action", "added");</span><br><span
+        style="font-size: 15px; font-family: 'Courier New'; background-color: transparent; font-weight: normal; white-space: pre-wrap; ">&nbsp;}</span><br><br><span
+        style="font-size: 15px; font-family: 'Courier New'; background-color: transparent; font-weight: normal; white-space: pre-wrap; ">...</span></pre><br><br><span
+        style="font-size: 15px; font-family: Arial; background-color: transparent; font-weight: normal; white-space: pre-wrap; ">portletResponse.setRendererParameter will invoke portlet's closure named renderAdded which I left empty:</span><br><br>
+    <pre class="prettyprint" linenumbers="off" type="groovy"><span
+        style="font-size: 15px; font-family: 'Courier New'; background-color: transparent; font-weight: normal; white-space: pre-wrap; ">def renderAdded = {</span><br><span
+        style="font-size: 15px; font-family: 'Courier New'; background-color: transparent; font-weight: normal; white-space: pre-wrap; ">&nbsp;&nbsp;&nbsp;log.info('Rendering added car view.')</span><br><span
+        style="font-size: 15px; font-family: 'Courier New'; background-color: transparent; font-weight: normal; white-space: pre-wrap; ">}</span></pre><br><br><br><span
+        style="font-size: 15px; font-family: Arial; background-color: transparent; font-weight: normal; white-space: pre-wrap; ">And also If you wish to render custom gsp file you can do it by linking to action which renders gsp page:</span><br><br>
+    <pre class="prettyprint" linenumbers="off" type="html"><span
+        style="font-size: 15px; font-family: 'Courier New'; background-color: transparent; font-weight: normal; white-space: pre-wrap; ">&lt;%@ taglib uri="http://java.sun.com/portlet" prefix="portlet" %&gt;</span><br><br><span
+        style="font-size: 15px; font-family: 'Courier New'; background-color: transparent; font-weight: normal; white-space: pre-wrap; ">&lt;portlet:renderURL var="added"&gt;</span><br><span
+        style="font-size: 15px; font-family: 'Courier New'; background-color: transparent; font-weight: normal; white-space: pre-wrap; ">&nbsp;&lt;portlet:param name="action" value="added"/&gt;</span><br><span
+        style="font-size: 15px; font-family: 'Courier New'; background-color: transparent; font-weight: normal; white-space: pre-wrap; ">&lt;/portlet:renderURL&gt;</span><br><br><span
+        style="font-size: 15px; font-family: 'Courier New'; background-color: transparent; font-weight: normal; white-space: pre-wrap; ">&lt;a href="&lt;%= added %&gt;"&gt;Go to page&lt;/a&gt;</span>
+        </pre><br><br><span
+        style="font-size: 15px; font-family: Arial; background-color: transparent; font-weight: normal; white-space: pre-wrap; ">By clicking on "Go to page" added.gsp file will be rendered.</span><br><span
+        style="font-size: 15px; font-family: Arial; background-color: transparent; font-weight: normal; white-space: pre-wrap; ">After doing these few steps we have a nice portlet which manages cars:</span><br><img
+        height="344px;"
+        src="https://lh6.googleusercontent.com/Be9pxgoccJ42nPotTlE5WPvubuU98yXKrxrtPLMRwMxjaiCcttXXLRMneHGIPMDunTtMO9Uktp6aex6ywPxusQl1LPfVk8R7jz-ZSlV9Nbf-ua1leG0"
+        width="460px;"><br><br><span
+        style="font-size: 15px; font-family: Arial; background-color: transparent; font-weight: normal; white-space: pre-wrap; ">Hope this will be helpful. Bye!</span><br><br><span
+        style="font-size: 15px; font-family: Arial; background-color: transparent; font-weight: normal; white-space: pre-wrap; ">Aleksey Lisikh, SysGears.</span></b>
+</p><p>&nbsp;</p><p>&nbsp;</p><p>&nbsp;</p><p>&nbsp;</p><p>&nbsp;</p>

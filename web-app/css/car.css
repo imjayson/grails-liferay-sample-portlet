@@ -1,0 +1,8 @@
+.cars-list li {
+    list-style-type: none;
+}
+
+.header {
+    margin: 10px;
+    font-variant: small-caps;
+}
