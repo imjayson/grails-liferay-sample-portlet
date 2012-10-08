@@ -7,12 +7,14 @@
 
 #### Quick Start:
 1. Clone the repo:
-```git clone https://github.com/Lizard5472/grails-cars-portlet-liferay.git```
+
+    git clone https://github.com/Lizard5472/grails-cars-portlet-liferay.git
+
 2. Go to Project's root directory:
-```
-cd /path/to/project/root/dir
-grails war
-```
+
+    cd /path/to/project/root/dir
+    grails war
+
 3. Copy war file from target directory to Liferay's deploy directory.
 
 #### And you're done!
