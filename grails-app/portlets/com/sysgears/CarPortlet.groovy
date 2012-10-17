@@ -1,9 +1,9 @@
 package com.sysgears
 
-import org.codehaus.grails.portlets.GrailsPortletHandlerMapping
-
-import javax.portlet.*
+import grails.converters.JSON
 import org.apache.commons.logging.LogFactory
+
+import javax.portlet.PortletMode
 
 class CarPortlet {
 
@@ -109,9 +109,11 @@ This is my sample grails liferay portlet.
 	//invoked by setting 'action' param in resourceURL (as an example) to 'doSomethingAjaxy'
 	def doSomethingAjaxy = {
 		//render JSON
-		render(contentType: "text/json") {
+
+		render ([success: "Ajax was successful!"] as JSON)
+		/*render(contentType: "text/json") {
 			example(mykey: "myvalue")
-		}
+		}*/
 	}
 
 	//invoked by setting 'action' param in eventURL (as an example) to 'handleThisEvent'
