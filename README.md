@@ -1,4 +1,4 @@
-# Grails Cars Portlet application example for Liferay Portal
+# Grails Sample Portlet application for Liferay Portal
 
 #### Project requirements:
 - Grails (>= 1.3.6)
@@ -9,7 +9,7 @@
 * Clone the repo:
 
     ```
-    git clone https://github.com/Lizard5472/grails-cars-portlet-liferay.git
+    git clone https://github.com/Lizard5472/grails-liferay-sample-portlet.git
     ```
 
 * Go to Project's root directory:
