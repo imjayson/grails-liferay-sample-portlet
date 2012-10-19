@@ -7,7 +7,7 @@
 </portlet:actionURL>
 
 <portlet:resourceURL var="ajaxCall">
-	<portlet:param name="action" value="doSomethingAjaxy"/>
+	<portlet:param name="action" value="rentCar"/>
 </portlet:resourceURL>
 
 <portlet:actionURL var="view" portletMode="view"/>
@@ -37,8 +37,7 @@
 	</form>
 
 	<a id="ajaxLink" href="#">Rent a car</a>
-
-	<div id="rent">No content yet.</div>
+	<div id="rent">You hadn't rent a car yet.</div>
 
 	<script type="text/javascript">
 		$(function () {

@@ -106,11 +106,11 @@ This is my sample grails liferay portlet.
 		['mykey': 'myvalue']
 	}
 
-	//invoked by setting 'action' param in resourceURL (as an example) to 'doSomethingAjaxy'
-	def doSomethingAjaxy = {
+	//invoked by setting 'action' param in resourceURL (as an example) to 'rentCar'
+	def rentCar = {
 		//render JSON
 
-		render ([success: "Ajax was successful!"] as JSON)
+		render ([success: "You have rent a car!"] as JSON)
 		/*render(contentType: "text/json") {
 			example(mykey: "myvalue")
 		}*/
